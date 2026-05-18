@@ -1,0 +1,3 @@
+include src/cubiomespi/lib/*.c
+include src/cubiomespi/lib/*.h
+recursive-include src/cubiomespi/lib/cubiomes *

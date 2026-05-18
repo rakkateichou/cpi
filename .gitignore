@@ -13,4 +13,4 @@ dist/
 
 __setup.py
 project.toml
-src/cubiomespi.egg-info
+src/cubiomespi_fork.egg-info/
