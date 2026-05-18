@@ -87,6 +87,7 @@ int INTERFACE_getBastionVariant(int mcVersion, uint64_t seed, int x, int z){
     case 30: {return 1;}  // Stables
     case 38: {return 2;}  // Treasure
     case 16: {return 3;}  // Bridge
+    default: {return -1;}
     }
 }
 
@@ -140,7 +141,7 @@ int* INTERFACE_find_closest_structure(int structure, int mcVersion, uint64_t see
             for (int rz=-radius; rz<=radius; rz++){
                 
                 d = sqrt((cx-rx)*(cx-rx) + (cz-rz)*(cz-rz));
-                if ((radius-1) < d <= radius){
+                if ((radius-1) < d && d <= radius){
                     Pos loc;
 
                     if (getStructurePos(structure, mcVersion, seed, rx, rz, &loc)){

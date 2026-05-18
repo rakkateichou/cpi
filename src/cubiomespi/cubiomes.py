@@ -1,8 +1,19 @@
 import ctypes, os
 from constants import *
 
+import sys
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
-lib = ctypes.CDLL(f'{script_dir}\\lib\\lib.dll')
+
+# Determine the correct library extension based on OS
+if sys.platform == "darwin":  # macOS
+    lib_name = "lib.dylib"
+elif sys.platform == "win32": # Windows
+    lib_name = "lib.dll"
+else:                         # Linux / Others
+    lib_name = "lib.so"
+
+lib = ctypes.CDLL(os.path.join(script_dir, "lib", lib_name))
 
 
 

@@ -1,10 +1,16 @@
 
-.git
-__pycache__
-build
-dist
+.venv/
+__pycache__/
+build/
+dist/
 
+.DS_Store
+
+# Compiled libraries/binaries
+*.dll
+*.so
+*.dylib
 
 __setup.py
 project.toml
-src\cubiomespi.egg-info
+src/cubiomespi.egg-info

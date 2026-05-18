@@ -1,9 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "./src/cubiomespi"
-    ],
-    "files.associations": {
-        "finders.h": "c",
-        "generator.h": "c"
-    }
-}
