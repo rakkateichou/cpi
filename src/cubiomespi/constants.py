@@ -35,6 +35,7 @@ class MCVersion:
     MC_1_19_2 = 23
     MC_1_19   = 24
     MC_1_20 = 25
+    MC_1_21 = 26
 
 
 class Structure: 
@@ -61,8 +62,10 @@ class Structure:
     Bastion = _constant(19, "Bastion")
     End_City = _constant(20, "End City")
     End_Gateway = _constant(21, "End Gateway")
-    Trail_Ruin = _constant(22, "Trail Ruin")
-    FEATURE_NUM = _constant(23, "FEATURE_NUM")
+    End_Island = _constant(22, "End Island")
+    Trail_Ruin = _constant(23, "Trail Ruin")
+    Trial_Chambers = _constant(24, "Trial Chambers")
+    FEATURE_NUM = _constant(25, "FEATURE_NUM")
 
 
 class BiomeID:
