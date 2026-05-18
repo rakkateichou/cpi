@@ -1,2 +1,2 @@
-from cubiomes import *
-from util import *
+from .cubiomes import *
+from .util import *
