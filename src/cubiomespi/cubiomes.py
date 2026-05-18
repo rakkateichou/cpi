@@ -1,19 +1,20 @@
-import ctypes, os
-from constants import *
+import ctypes, os, sys
+import glob
 
-import sys
+# Try relative import first (when used as a package), fallback to absolute (when run locally)
+try:
+    from .constants import *
+except ImportError:
+    from constants import *
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Determine the correct library extension based on OS
-if sys.platform == "darwin":  # macOS
-    lib_name = "lib.dylib"
-elif sys.platform == "win32": # Windows
-    lib_name = "lib.dll"
-else:                         # Linux / Others
-    lib_name = "lib.so"
+# Find the compiled C extension (setuptools adds platform-specific suffixes like .cpython-311-darwin.so or .pyd)
+lib_files = glob.glob(os.path.join(script_dir, "lib_c.*"))
+if not lib_files:
+    raise FileNotFoundError("Compiled cubiomes library not found. Please install the package using pip.")
 
-lib = ctypes.CDLL(os.path.join(script_dir, "lib", lib_name))
+lib = ctypes.CDLL(lib_files[0])
 
 
 

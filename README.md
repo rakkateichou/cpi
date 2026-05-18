@@ -1,5 +1,14 @@
 # Cubiomes Python Interface (CPI) Documentation
 
+This is an updated fork of the original cubiomespi package, adding support for Minecraft 1.21 and cross-platform installations.
+
+You can install this fork via pip:
+
+    pip install cubiomespi-fork
+
+*The original README follows below:*
+
+
 ## Overview
 
 The Cubiomes Python Interface (CPI) is a python interface for [Cubiomes](https://github.com/Cubitect/cubiomes)
