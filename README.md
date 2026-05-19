@@ -1,6 +1,6 @@
 # Cubiomes Python Interface (CPI) Documentation
 
-This is an updated, maintained fork of the original [cubiomespi](https://github.com/Languste27/cpi) package. It wraps the powerful [Cubiomes](https://github.com/Cubitect/cubiomes) library and introduces a clean, object-oriented API in Python to find structures, spawn points, and biomes in Minecraft seeds.
+This is an updated fork of the original [cubiomespi](https://github.com/Languste27/cpi) package. It wraps the [Cubiomes](https://github.com/Cubitect/cubiomes) library and introduces a clean, object-oriented API in Python to find structures, spawn points, and biomes in Minecraft seeds.
 
 **Key Features of this Fork:**
 - Adds support for Minecraft 1.21 features (`Trial_Chambers`, etc.).
