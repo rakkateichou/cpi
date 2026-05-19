@@ -1,226 +1,78 @@
 # Cubiomes Python Interface (CPI) Documentation
 
-This is an updated fork of the original cubiomespi package, adding support for Minecraft 1.21 and cross-platform installations.
+This is an updated, maintained fork of the original [cubiomespi](https://github.com/Languste27/cpi) package. It wraps the powerful [Cubiomes](https://github.com/Cubitect/cubiomes) library and introduces a clean, object-oriented API in Python to find structures, spawn points, and biomes in Minecraft seeds.
 
-You can install this fork via pip:
+**Key Features of this Fork:**
+- Adds support for Minecraft 1.21 features (`Trial_Chambers`, etc.).
+- Complete standard Python `IntEnum` integration for cleaner Data/Enum interactions.
+- Added Object-Oriented wrapper (`Generator` class API).
+- Cross-platform dynamic compilation via `setuptools`.
 
-    pip install cubiomespi-fork
+---
 
-*The original README follows below:*
+## Installation
 
+You can install this fork directly via pip:
 
-## Overview
+```bash
+pip install cubiomespi-fork
+```
 
-The Cubiomes Python Interface (CPI) is a python interface for [Cubiomes](https://github.com/Cubitect/cubiomes)
-# Usage
-To use you can download it via pip, with:
-     
-     
-     pip install cubiomespi
+*(Note: Requires Python 3.11+)*
 
-## Classes
+## Usage / Quick Start
 
-### `Generator`
+```python
+from cubiomespi import Generator, MCVersion, Dimension, BiomeID, Structure
 
-Stores data about the Minecraft world generator.
+# 1. Initialize a Generator with a specific MC Version, Seed, and Dimension
+generator = Generator(MCVersion.MC_1_21, -2197368822535229394, Dimension.DIM_OVERWORLD)
 
-- **Attributes:**
-  - `version` (int): Minecraft version number.
-  - `seed` (int): Random seed for world generation.
-  - `dimension` (int): Dimension ID.
+# 2. Get the Biome at 0, 0, 0
+biome = generator.get_biome_at(0, 0, 0)
+print(f"Biome at 0,0,0: {biome.label}") # "River"
 
+# Comparison is direct and Pythonic!
+if biome == BiomeID.plains:
+    print("Found Plains!")
 
-## Dimension
+# 3. Find Spawn Position
+spawn_x, spawn_z = generator.get_spawn_pos()
+print(f"Spawn: ({spawn_x}, {spawn_z})")
 
-Defines Minecraft dimensions with constants.
+# 4. Find the closest Village within a given range
+closest_village = generator.find_closest_structure(Structure.Village, 0, 0, limit=100)
+print("Closest Village:", closest_village)
+```
 
-    Constants:
-        DIM_NETHER = -1
-        DIM_OVERWORLD = 0
-        DIM_END = 1
-        DIM_UNDEF = 1000
+## API Documentation
 
-## MCVersion
+### Enum Classes
+All core types (`BiomeID`, `Structure`, `MCVersion`, `Dimension`, `BastionType`) are standard Python `IntEnum` classes. This means they are evaluated as interoperable integers in C, while carrying `.name` and `.label` descriptors in Python.
 
-Defines Minecraft version constants.
+- **`MCVersion`**: `MC_1_21`, `MC_1_20`, `MC_1_19`, etc.
+- **`Dimension`**: `DIM_OVERWORLD`, `DIM_NETHER`, `DIM_END`.
+- **`BiomeID`**: `plains`, `desert`, `ocean`, `river`, `lush_caves`, etc.
+- **`Structure`**: `Village`, `Mansion`, `Desert_Pyramid`, `Trial_Chambers`, etc.
+- **`BastionType`**: `HOUSING`, `STABLES`, `TREASURE`, `BRIDGE`.
 
-    Constants:
-        MC_1_0_0 = 3
-        MC_1_1_0 = 4
-        MC_1_2_5 = 5
-        ... (and so on up to MC_1_20)
+### The `Generator` Class
 
-## Structure
+Provides the primary interface for running calculations and looking up seed data.
 
-Defines various Minecraft structures with constants.
+- `__init__(mc_version: MCVersion, seed: int, dimension: Dimension)`
+- `get_spawn_pos() -> tuple[int, int]` - Gets the default world spawn point.
+- `get_biome_at(x: int, y: int, z: int) -> BiomeID` - Gets the Biome at specific X/Y/Z coords.
+- `get_structure_pos(structure: Structure, rx: int, rz: int) -> tuple[int, int]` - Given region coordinates, returns exact coordinates of the structure.
+- `is_viable_structure_pos(structure: Structure, x: int, z: int) -> bool` - Validates if a proposed structure position is structurally viable in that biome.
+- `find_closest_structure(structure: Structure, cx: int, cz: int, limit: int) -> tuple[int, int]` - Locates the absolute closest structure starting from coordinates (cx, cz).
+- `find_structure_in_range(structure: Structure, srx: int, srz: int, erx: int, erz: int) -> list[tuple[int, int]]` - Checks a rectangular region for any generated instances of a structure.
+- `get_stronghold_pos(count=3) -> list[tuple[int, int]]` - Returns coordinates of the nearest strongholds.
+- `get_bastion_variant(x: int, z: int) -> BastionType` - Determines the variant geometry of a bastion at coordinates.
+- `get_end_y_height(x: int, z: int) -> int` - Returns surface height mapping in the End dimension.
 
-    Constants:
-        Feature = 0
-        Desert_Pyramid = 1
-        Jungle_Temple = 2
-        ... (and so on)
+### Utility Functions (from `cubiomespi.util`)
 
-## BiomeID
-
-Defines Minecraft biomes with constants.
-
-    Constants:
-        none = -1
-        ocean = 0
-        plains = 1
-        ... (and so on, including custom biomes)
-
-## BiomeGroups
-
-Groups of biomes for convenience.
-
-    Attributes:
-        Forests
-        Beaches
-        DesertBiomes
-        Oceans
-
-## BastionType
-
-Defines various bastion types.
-
-    Constants:
-        HOUSING = 0
-        STABLES = 1
-        TREASURE = 2
-        BRIDGE = 3
-
-# Functions
-## distance_between_structures(structure1, structure2) -> float
-
-### Calculates the distance between two structures.
-
-    Parameters:
-        structure1 (tuple[int, int]): Coordinates of the first structure.
-        structure2 (tuple[int, int]): Coordinates of the second structure.
-
-    Returns:
-        float: Distance between the two structures.
-
-## distance_from_00(c1) -> float
-
-### Calculates the distance from the origin (0,0) to a given coordinate.
-
-    Parameters:
-        c1 (tuple[int, int]): Coordinates.
-
-    Returns:
-        float: Distance from the origin.
-
-## distance_between_points(x1, y1, x2, y2) -> float
-
-### Calculates the distance between two points.
-
-    Parameters:
-        x1, y1, x2, y2 (int): Coordinates of the two points.
-
-    Returns:
-        float: Distance between the two points.
-
-## convert_to_string(constant: int, typee: object) -> str
-
-### Converts a constant value to its string representation based on its type.
-
-    Parameters:
-        constant (int): The constant to convert.
-        typee (object): The type of the constant (e.g., BastionType, Structure, BiomeID).
-
-    Returns:
-        str: String representation of the constant.
-
-## get_structure_pos(structure: Structure, g: Generator, rx: int, rz: int) -> tuple[int, int]
-
-### Gets the position of a structure.
-
-    Parameters:
-        structure (Structure): The structure to find.
-        g (Generator): The generator instance.
-        rx, rz (int): Coordinates.
-
-    Returns:
-        tuple[int, int]: Coordinates of the structure or None if not found.
-
-## is_viable_structure_pos(structure: Structure, g: Generator, x: int, z: int) -> bool
-
-### Checks if a position is viable for a structure.
-
-    Parameters:
-        structure (Structure): The structure to check.
-        g (Generator): The generator instance.
-        x, z (int): Coordinates.
-
-    Returns:
-        bool: True if viable, otherwise False.
-
-## get_stronghold_pos(g: Generator, count: int) -> list[tuple[int, int]]
-
-### Gets positions of strongholds.
-
-    Parameters:
-        g (Generator): The generator instance.
-        count (int): Number of strongholds to retrieve.
-
-    Returns:
-        list[tuple[int, int]]: List of stronghold positions.
-
-## get_spawn_pos(g: Generator) -> tuple[int, int]
-
-### Gets the spawn position of the world.
-
-    Parameters:
-        g (Generator): The generator instance.
-
-    Returns:
-        tuple[int, int]: Spawn coordinates.
-
-## get_biome_at(g: Generator, x: int, y: int, z: int) -> BiomeID
-
-### Gets the biome at a specific coordinate.
-
-    Parameters:
-        g (Generator): The generator instance.
-        x, y, z (int): Coordinates.
-
-    Returns:
-        BiomeID: ID of the biome at the coordinates.
-
-## get_bastion_variant(g: Generator, x: int, z: int) -> BastionType
-
-### Gets the bastion variant at a specific coordinate.
-
-    Parameters:
-        g (Generator): The generator instance.
-        x, z (int): Coordinates.
-
-    Returns:
-        BastionType: Type of bastion at the coordinates.
-
-## find_structure_in_range(g: Generator, structure: Structure, srx: int, srz: int, erx: int, erz: int) -> list[tuple[int, int]]
-
-### Finds structures within a specified range.
-
-    Parameters:
-        g (Generator): The generator instance.
-        structure (Structure): The structure to find.
-        srx, srz, erx, erz (int): Range coordinates.
-
-    Returns:
-        list[tuple[int, int]]: List of structure positions or None if no structures are found.
-
-## find_closest_structure(g: Generator, structure: Structure, cx: int, cz: int, limit: int) -> tuple[int, int]
-
-### Finds the closest structure to a given coordinate.
-
-    Parameters:
-        g (Generator): The generator instance.
-        structure (Structure): The structure to find.
-        cx, cz (int): Coordinates.
-        limit (int): Maximum search distance.
-
-    Returns:
-        tuple[int, int]: Coordinates of the closest structure or None if not found.
+- `distance_between_structures(s1, s2)` - Fast math calc.
+- `distance_from_00(c1)` - Fast origin calc.
+- `distance_between_points(x1, y1, x2, y2)` - Quick cartesian distance mapping.

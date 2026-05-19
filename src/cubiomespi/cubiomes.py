@@ -20,13 +20,38 @@ lib = ctypes.CDLL(lib_files[0])
 
 class Generator:
     def __init__(self, mc: int, seed: int, dimension: int) -> None:
-
         self.version = mc
         self.seed = seed
         self.dimension = dimension
-    
-    # def _gen_to_c(self):
-    #     return (__c(self.version), __c(self.seed, True), __c(self.dimension))
+
+    def get_end_y_height(self, x: int, z: int) -> int:
+        return get_end_y_height(self, x, z)
+
+    def get_structure_pos(self, structure, rx: int, rz: int) -> tuple[int, int]:
+        return get_structure_pos(structure, self, rx, rz)
+
+    def is_viable_structure_pos(self, structure, x: int, z: int) -> bool:
+        return is_viable_structure_pos(structure, self, x, z)
+
+    def get_stronghold_pos(self, count=3) -> list[tuple[int, int]]:
+        return get_stronghold_pos(self, count)
+
+    def get_spawn_pos(self) -> tuple[int, int]:
+        return get_spawn_pos(self)
+
+    def get_biome_at(self, x: int, y: int, z: int):
+        return get_biome_at(self, x, y, z)
+
+
+    def get_bastion_variant(self, x: int, z: int) -> int:
+        return get_bastion_variant(self, x, z)
+
+    def find_structure_in_range(self, structure, srx: int, srz: int, erx: int, erz: int) -> list[tuple[int, int]]:
+        return find_structure_in_range(self, structure, srx, srz, erx, erz)
+
+    def find_closest_structure(self, structure, cx: int, cz: int, limit: int) -> tuple[int, int]:
+        return find_closest_structure(self, structure, cx, cz, limit)
+
 
 
 
@@ -113,7 +138,11 @@ def get_biome_at(g: Generator, x: int, y: int, z: int) -> BiomeID:
     f.restype = ctypes.c_int
     f.argtypes = [ctypes.c_int, ctypes.c_uint64, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int]
     biome = f(cversion, cseed, cdimension, cx, cy, cz)
-    return biome
+    try:
+        from .constants import BiomeID
+        return BiomeID(biome)
+    except (ImportError, ValueError):
+        return biome
 
 
 def get_bastion_variant(g: Generator, x: int, z: int) -> BastionType:
