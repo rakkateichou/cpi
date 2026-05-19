@@ -6,7 +6,7 @@ This is an updated fork of the original [cubiomespi](https://github.com/Languste
 - Adds support for Minecraft 1.21 features (`Trial_Chambers`, etc.).
 - Complete standard Python `IntEnum` integration for cleaner Data/Enum interactions.
 - Added Object-Oriented wrapper (`Generator` class API).
-- Cross-platform dynamic compilation via `setuptools`.
+- Cross-platform (Linux + MacOS support) dynamic compilation via `setuptools`.
 
 ---
 
